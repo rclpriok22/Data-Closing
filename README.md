@@ -46,7 +46,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      background-image: url('https://raw.githubusercontent.com/username/data-closing-time/main/background.jpg');
+      background-image: url('assets/aerial-view-container-cargo-ship-sea (1).jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
