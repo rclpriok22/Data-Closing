@@ -1,3 +1,4 @@
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -6,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      background-image: url('assets/aerial-view-container-cargo-ship-sea (1).jpg');
+      background-image: url('https://raw.githubusercontent.com/username/data-closing-time/main/background.jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -141,6 +142,9 @@
           body: JSON.stringify(data),
           muteHttpExceptions: true
         });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}, Status Text: ${response.statusText}`);
+        }
         const result = await response.json();
         console.log('Response:', result);
         status.textContent = result.message;
