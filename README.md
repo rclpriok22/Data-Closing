@@ -174,7 +174,7 @@
       };
 
       try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxVtAqCma9MVvx61FRV-7NFHvXP4qvDutDG4DztqEzPuUJR3n2NXnTE5itvV9FfTslT/exec', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbzy1bWpM_KSUCFrk1UX8Ozwl_wVc9KK4tpYfLg4v5Ny6-RvbJ9sIYJpwxqx84KZ02-X/exec', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
