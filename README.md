@@ -136,7 +136,7 @@
       console.log('Sending data:', JSON.stringify(data));
 
       try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbwLjWd12s4x3FDnC1gyoaEy5X6Pa1C71zB0rZ0A1G4RjjXAQi9EBOfL_V6w_o5K5xJF/exec', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbynnUcU5wFEXnZM9vwpsDtP2bTm4DbfADECrjXD6qMLxusqdEtLlnIZZfdgYjDsCAGN/exec', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
