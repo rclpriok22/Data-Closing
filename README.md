@@ -13,14 +13,17 @@
     .radio-group input:checked + span { background-color: #3b82f6; color: white; }
     input, select, button { min-height: 44px; }
     @media (max-width: 640px) {
-      th, td { font-size: 12px; padding: 6px; white-space: nowrap; }
-      .radio-group { flex-direction: column; gap: 10px; }
-      .container { padding: 12px; }
-      .table-container { max-width: 100%; overflow-x: auto; }
-      select, input[type="text"] { font-size: 14px; }
+      .container-table { display: block; overflow-x: auto; }
+      .container-row { display: flex; flex-direction: column; gap: 8px; padding: 8px 0; }
+      .container-cell { width: 100%; padding: 4px; }
+      th, td { font-size: 12px; padding: 4px; white-space: nowrap; }
+      .add-button { width: 100%; margin-top: 8px; }
+      select, input[type="text"] { font-size: 14px; width: 100%; }
+      .radio-group { flex-direction: column; gap: 6px; }
     }
     @media (max-width: 360px) {
-      th, td { font-size: 11px; padding: 5px; }
+      th, td { font-size: 11px; padding: 3px; }
+      .container-cell { padding: 2px; }
     }
   </style>
 </head>
@@ -49,7 +52,7 @@
           </div>
         </div>
       </div>
-      <div class="bg-white rounded-lg shadow-md table-container">
+      <div class="bg-white rounded-lg shadow-md container-table">
         <table class="w-full border-collapse" id="container_table">
           <thead>
             <tr class="bg-gray-200">
@@ -61,12 +64,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr id="row_1">
-              <td class="p-3">
+            <tr id="row_1" class="container-row">
+              <td class="container-cell">
                 <input type="text" name="container_number_1" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
-                <button type="button" onclick="addRow()" class="mt-2 w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 active:bg-blue-700 transition">Add</button>
               </td>
-              <td class="p-3">
+              <td class="container-cell">
                 <select name="type_container_1" id="type_container_1" onchange="updateForm(1)" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
                   <option value="DRY">DRY</option>
                   <option value="DG">DG</option>
@@ -74,20 +76,20 @@
                   <option value="MTY">MTY</option>
                 </select>
               </td>
-              <td class="p-3">
+              <td class="container-cell">
                 <select name="size_container_1" id="size_container_1" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
                   <option value="20'GP">20'GP</option>
                   <option value="40'HC">40'HC</option>
                   <option value="45'Ft">45'Ft</option>
                 </select>
               </td>
-              <td class="p-3">
+              <td class="container-cell">
                 <div class="radio-group flex flex-col gap-2">
                   <label class="flex items-center"><input type="radio" name="cetak_kartu_1" value="sudah" class="mr-2 h-5 w-5"><span class="p-2 rounded-md">Sudah</span></label>
                   <label class="flex items-center"><input type="radio" name="cetak_kartu_1" value="belum" class="mr-2 h-5 w-5"><span class="p-2 rounded-md">Belum</span></label>
                 </div>
               </td>
-              <td class="p-3">
+              <td class="container-cell">
                 <button type="button" onclick="removeRow(1)" class="text-red-500 hover:text-red-700 active:text-red-800 hidden">Remove</button>
               </td>
             </tr>
@@ -113,6 +115,7 @@
             </tr>
           </tbody>
         </table>
+        <button type="button" id="add_button_1" onclick="addRow()" class="add-button bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 active:bg-blue-700 transition w-full mt-2">Add</button>
       </div>
       <button type="submit" class="mt-6 w-full bg-green-500 text-white p-3 rounded-md hover:bg-green-600 active:bg-blue-700 transition text-lg">Submit</button>
     </form>
@@ -157,13 +160,12 @@
       
       const newRow = document.createElement('tr');
       newRow.id = `row_${rowCount}`;
-      newRow.classList.add('row-enter');
+      newRow.classList.add('row-enter', 'container-row');
       newRow.innerHTML = `
-        <td class="p-3">
+        <td class="container-cell">
           <input type="text" name="container_number_${rowCount}" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
-          <button type="button" onclick="addRow()" class="mt-2 w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 active:bg-blue-700 transition">Add</button>
         </td>
-        <td class="p-3">
+        <td class="container-cell">
           <select name="type_container_${rowCount}" id="type_container_${rowCount}" onchange="updateForm(${rowCount})" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             <option value="DRY">DRY</option>
             <option value="DG">DG</option>
@@ -171,20 +173,20 @@
             <option value="MTY">MTY</option>
           </select>
         </td>
-        <td class="p-3">
+        <td class="container-cell">
           <select name="size_container_${rowCount}" id="size_container_${rowCount}" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             <option value="20'GP">20'GP</option>
             <option value="40'HC">40'HC</option>
             <option value="45'Ft">45'Ft</option>
           </select>
         </td>
-        <td class="p-3">
+        <td class="container-cell">
           <div class="radio-group flex flex-col gap-2">
             <label class="flex items-center"><input type="radio" name="cetak_kartu_${rowCount}" value="sudah" class="mr-2 h-5 w-5"><span class="p-2 rounded-md">Sudah</span></label>
             <label class="flex items-center"><input type="radio" name="cetak_kartu_${rowCount}" value="belum" class="mr-2 h-5 w-5"><span class="p-2 rounded-md">Belum</span></label>
           </div>
         </td>
-        <td class="p-3">
+        <td class="container-cell">
           <button type="button" onclick="removeRow(${rowCount})" class="text-red-500 hover:text-red-700 active:text-red-800">Remove</button>
         </td>
       `;
@@ -221,6 +223,14 @@
       table.appendChild(dgRow);
 
       updateForm(rowCount);
+      document.getElementById(`add_button_${rowCount - 1}`).classList.add('hidden');
+      const newAddButton = document.createElement('button');
+      newAddButton.type = 'button';
+      newAddButton.id = `add_button_${rowCount}`;
+      newAddButton.classList.add('add-button', 'bg-blue-500', 'text-white', 'p-3', 'rounded-md', 'hover:bg-blue-600', 'active:bg-blue-700', 'transition', 'w-full', 'mt-2');
+      newAddButton.textContent = 'Add';
+      newAddButton.onclick = addRow;
+      table.parentNode.appendChild(newAddButton);
     }
 
     function removeRow(rowIndex) {
@@ -228,7 +238,11 @@
       document.getElementById(`row_${rowIndex}`).remove();
       document.getElementById(`reefer_fields_${rowIndex}`).remove();
       document.getElementById(`dg_fields_${rowIndex}`).remove();
-      if (rowIndex === rowCount) rowCount--;
+      document.getElementById(`add_button_${rowIndex}`).remove();
+      if (rowIndex === rowCount) {
+        rowCount--;
+        document.getElementById(`add_button_${rowCount - 1}`).classList.remove('hidden');
+      }
     }
 
     async function handleSubmit(event) {
@@ -268,7 +282,7 @@
       }
 
       try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbzY6UIYG9OrwF78KNT1iWkHmgepaVApP2lyoAbzk_qb6YGkLhR1NPpus3JJoyGXnnA4/exec', {
+        const response = await fetch('<WEB_APP_URL>', {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
