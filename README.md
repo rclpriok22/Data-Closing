@@ -6,58 +6,117 @@
   <title>DATA CLOSING TIME</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .hidden { display: none !important; } /* Added !important for robustness */
+    .hidden { display: none !important; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
     .row-enter { animation: fadeIn 0.3s ease-in; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     .radio-group label { cursor: pointer; touch-action: manipulation; }
     .radio-group input:checked + span { background-color: #3b82f6; color: white; }
     input, select, button { min-height: 44px; }
-      @media (max-width: 640px) {
-      .container-table-wrapper {
-        display: block;
-        overflow-x: auto; /* Memungkinkan scroll horizontal */
-        -webkit-overflow-scrolling: touch; /* Scroll lebih smooth di iOS */
+
+    /* == GLOBAL STYLES (Applies to Desktop & Base for Mobile) == */
+    .container-table-wrapper {
+        display: block; /* Needed for overflow-x to work if table is wider */
+        width: 100%;
+        overflow-x: auto; /* Allow horizontal scroll on desktop too if content forces it */
+       -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+
+    #container_table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    #container_table th,
+    #container_table td {
+        border: 1px solid #e2e8f0; /* Tailwind gray-200 */
+        padding: 0.75rem; /* p-3 */
+        text-align: left;
+        vertical-align: middle; /* Vertically align content in cells */
+    }
+
+    /* Specific column widths for DESKTOP for better layout */
+    /* Container No can be flexible */
+    /* #container_table th:nth-child(1), #container_table td:nth-child(1) {} */
+
+    #container_table th:nth-child(2), /* Type */
+    #container_table td:nth-child(2) {
+        width: 130px; /* Adjust as needed */
+    }
+    #container_table th:nth-child(3), /* Size */
+    #container_table td:nth-child(3) {
+        width: 110px; /* Adjust as needed */
+    }
+    #container_table th:nth-child(4), /* Cetak Kartu */
+    #container_table td:nth-child(4) {
+        width: 160px; /* Adjust for radio buttons */
+    }
+    /* Center the radio group within its cell on desktop */
+    #container_table td:nth-child(4) .radio-group {
+        width: -moz-fit-content; /* Firefox */
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #container_table th:nth-child(5), /* Action/Remove column */
+    #container_table td:nth-child(5) {
+        width: 100px; /* Fixed width for remove button column */
+        text-align: center;
+    }
+
+    #container_table input[type="text"],
+    #container_table select {
+        width: 100%;
+        box-sizing: border-box; /* Ensures padding/border don't expand element beyond 100% */
+        /* p-3 and border are already applied by Tailwind on the input itself, so this is fine */
+    }
+    /* == END OF GLOBAL STYLES == */
+
+
+    /* == MOBILE STYLES (Overrides and additions for smaller screens) == */
+    @media (max-width: 768px) { /* Increased breakpoint slightly for tablets too */
+      /* .container-table-wrapper will already have overflow-x: auto from global */
+
+      /* Remove fixed widths from desktop to allow min-widths to take effect for scrolling */
+      #container_table th:nth-child(2), #container_table td:nth-child(2),
+      #container_table th:nth-child(3), #container_table td:nth-child(3),
+      #container_table th:nth-child(4), #container_table td:nth-child(4),
+      #container_table th:nth-child(5), #container_table td:nth-child(5) {
+          width: auto; /* Reset desktop fixed widths */
       }
-      /* HAPUS atau KOMENTARI aturan untuk .container-row dan .container-cell yang membuatnya jadi kolom */
-      /* .container-row { display: flex; flex-direction: column; gap: 8px; padding: 8px 0; } */
-      /* .container-cell { width: 100%; padding: 4px; } */
-
-      /* Pastikan th dan td tetap memiliki nowrap agar tidak wrap ke bawah */
-      th, td {
-        font-size: 12px; /* Atau sesuaikan */
-        padding: 6px 8px; /* Sedikit lebih besar mungkin lebih baik untuk tap */
-        white-space: nowrap; /* Sangat penting agar teks tidak wrap dan tabel bisa di-scroll */
+      /* Center radio group on mobile (remove auto margins if they cause issues with min-width) */
+      #container_table td:nth-child(4) .radio-group {
+        margin-left: 0;
+        margin-right: 0;
+        /* width: auto; /* Let it fill the min-width of the cell */
       }
-      /* Atur lebar minimum untuk kolom tertentu jika perlu agar tidak terlalu sempit */
-      #container_table th:nth-child(1), #container_table td:nth-child(1) { min-width: 120px; } /* Contoh untuk Container No */
-      #container_table th:nth-child(2), #container_table td:nth-child(2) { min-width: 100px; } /* Contoh untuk Type */
-      #container_table th:nth-child(3), #container_table td:nth-child(3) { min-width: 80px;  } /* Contoh untuk Size */
-      #container_table th:nth-child(4), #container_table td:nth-child(4) { min-width: 150px; } /* Contoh untuk Cetak Kartu, karena ada 2 radio */
 
 
-      .add-button { width: 100%; margin-top: 8px; }
-      select, input[type="text"] { font-size: 14px; width: 100%; box-sizing: border-box; /* Pastikan padding tidak menambah lebar */}
+      #container_table th,
+      #container_table td {
+        font-size: 12px; /* Slightly smaller font */
+        padding: 8px 10px; /* Adjust padding */
+        white-space: nowrap; /* CRITICAL for horizontal scrolling */
+      }
 
-      /* Untuk radio button "Cetak Kartu" agar tetap rapi di dalam sel yang mungkin sempit */
+      /* Minimum widths for columns when scrolling on mobile */
+      #container_table th:nth-child(1), #container_table td:nth-child(1) { min-width: 150px; } /* Container No */
+      #container_table th:nth-child(2), #container_table td:nth-child(2) { min-width: 120px; } /* Type */
+      #container_table th:nth-child(3), #container_table td:nth-child(3) { min-width: 100px; } /* Size */
+      #container_table th:nth-child(4), #container_table td:nth-child(4) { min-width: 140px; } /* Cetak Kartu */
+      #container_table th:nth-child(5), #container_table td:nth-child(5) { min-width: 80px; text-align: center; } /* Action */
+
+      .add-button { width: 100%; margin-top: 8px; } /* Keep add button full width */
+      /* select, input[type="text"] global styles for width:100% should be fine */
       .radio-group {
-        /* Biarkan flex-direction: column agar Sudah dan Belum tetap vertikal di dalam selnya,
-           ATAU ubah ke flex-direction: row jika ingin mereka berdampingan (mungkin terlalu sempit) */
-        flex-direction: column; /* Defaultnya sudah begini dari Tailwind, tapi bisa eksplisit */
-        gap: 4px;
-        align-items: flex-start; /* Rata kiri */
-      }
-      .radio-group label {
-         min-width: 60px; /* Agar label "Sudah" / "Belum" tidak terpotong aneh */
-      }
-      .radio-group input:checked + span {
-        padding: 0.25rem 0.5rem; /* Sedikit lebih kecil jika perlu */
+         flex-direction: column; /* Ensure radios stack vertically within their cell */
+         gap: 6px;
       }
     }
-    @media (max-width: 360px) {
-      th, td { font-size: 11px; padding: 3px; }
-      .container-cell { padding: 2px; }
-    }
+    /* You can add another breakpoint for very small phones if needed */
+    /* @media (max-width: 360px) { ... } */
+
   </style>
 </head>
 <body class="bg-gray-100 font-sans">
@@ -85,23 +144,23 @@
           </div>
         </div>
       </div>
-      <div class="bg-white rounded-lg shadow-md container-table-wrapper">
+      <div class="bg-white rounded-lg shadow-md container-table-wrapper"> <!-- Wrapper for scroll -->
         <table class="w-full border-collapse" id="container_table">
           <thead>
             <tr class="bg-gray-200">
-              <th scope="col" class="p-3 text-left text-sm font-semibold text-gray-700">Container No</th>
-              <th scope="col" class="p-3 text-left text-sm font-semibold text-gray-700">Type</th>
-              <th scope="col" class="p-3 text-left text-sm font-semibold text-gray-700">Size</th>
-              <th scope="col" class="p-3 text-left text-sm font-semibold text-gray-700">Cetak Kartu</th>
-              <th scope="col" class="p-3"><span class="sr-only">Actions</span></th>
+              <th scope="col">Container No</th>
+              <th scope="col">Type</th>
+              <th scope="col">Size</th>
+              <th scope="col">Cetak Kartu</th>
+              <th scope="col"><span class="sr-only">Actions</span></th>
             </tr>
           </thead>
           <tbody>
-            <tr id="row_1" class="container-row">
-              <td class="container-cell">
+            <tr id="row_1" class="container-row"> <!-- container-row class is not strictly used by CSS anymore but can be kept -->
+              <td> <!-- container-cell class is not strictly used by CSS anymore -->
                 <input type="text" name="container_number_1" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
               </td>
-              <td class="container-cell">
+              <td>
                 <select name="type_container_1" id="type_container_1" onchange="updateForm(1)" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
                   <option value="DRY">DRY</option>
                   <option value="DG">DG</option>
@@ -109,23 +168,23 @@
                   <option value="MTY">MTY</option>
                 </select>
               </td>
-              <td class="container-cell">
+              <td>
                 <select name="size_container_1" id="size_container_1" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
                   <option value="20'GP">20'GP</option>
                   <option value="40'HC">40'HC</option>
                   <option value="45'Ft">45'Ft</option>
                 </select>
               </td>
-              <td class="container-cell">
+              <td>
                 <fieldset>
                     <legend class="sr-only">Cetak Kartu for container 1</legend>
-                    <div class="radio-group flex flex-col gap-2">
+                    <div class="radio-group flex flex-col gap-2"> <!-- Tailwind classes control layout -->
                       <label class="flex items-center"><input type="radio" name="cetak_kartu_1" value="sudah" class="mr-2 h-5 w-5"><span class="p-2 rounded-md">Sudah</span></label>
                       <label class="flex items-center"><input type="radio" name="cetak_kartu_1" value="belum" class="mr-2 h-5 w-5"><span class="p-2 rounded-md">Belum</span></label>
                     </div>
                 </fieldset>
               </td>
-              <td class="container-cell">
+              <td>
                 <button type="button" onclick="removeRow(1)" class="remove-row-button text-red-500 hover:text-red-700 active:text-red-800 hidden">Remove</button>
               </td>
             </tr>
@@ -157,11 +216,11 @@
     </form>
   </div>
   <script>
-    let nextRowId = 1; // Used to generate unique IDs for new rows
+    let nextRowId = 1;
 
     function updateForm(rowIndex) {
       const typeSelect = document.getElementById(`type_container_${rowIndex}`);
-      if (!typeSelect) return; // Row might have been removed
+      if (!typeSelect) return;
       const type = typeSelect.value;
       
       const sizeSelect = document.getElementById(`size_container_${rowIndex}`);
@@ -172,12 +231,10 @@
       const imoInput = document.querySelector(`input[name="imo_${rowIndex}"]`);
       const unnoInput = document.querySelector(`input[name="unno_${rowIndex}"]`);
 
-      // Reset conditional required attributes
       if (setTempInput) setTempInput.required = false;
       if (imoInput) imoInput.required = false;
       if (unnoInput) unnoInput.required = false;
 
-      // Clear current options
       if (sizeSelect) sizeSelect.innerHTML = '';
 
       if (type === 'Reefer') {
@@ -232,12 +289,12 @@
       
       const newRow = document.createElement('tr');
       newRow.id = `row_${nextRowId}`;
-      newRow.classList.add('row-enter', 'container-row');
+      newRow.classList.add('row-enter', 'container-row'); // Keep container-row for consistent selection
       newRow.innerHTML = `
-        <td class="container-cell">
+        <td>
           <input type="text" name="container_number_${nextRowId}" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
         </td>
-        <td class="container-cell">
+        <td>
           <select name="type_container_${nextRowId}" id="type_container_${nextRowId}" onchange="updateForm(${nextRowId})" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             <option value="DRY">DRY</option>
             <option value="DG">DG</option>
@@ -245,14 +302,14 @@
             <option value="MTY">MTY</option>
           </select>
         </td>
-        <td class="container-cell">
+        <td>
           <select name="size_container_${nextRowId}" id="size_container_${nextRowId}" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             <option value="20'GP">20'GP</option>
             <option value="40'HC">40'HC</option>
             <option value="45'Ft">45'Ft</option>
           </select>
         </td>
-        <td class="container-cell">
+        <td>
           <fieldset>
             <legend class="sr-only">Cetak Kartu for container ${nextRowId}</legend>
             <div class="radio-group flex flex-col gap-2">
@@ -261,7 +318,7 @@
             </div>
           </fieldset>
         </td>
-        <td class="container-cell">
+        <td>
           <button type="button" onclick="removeRow(${nextRowId})" class="remove-row-button text-red-500 hover:text-red-700 active:text-red-800">Remove</button>
         </td>
       `;
@@ -339,7 +396,7 @@
       const containerRows = tableBody.querySelectorAll('tr.container-row');
 
       containerRows.forEach(row => {
-        const rowIdSuffix = row.id.split('_')[1]; // e.g., "row_1" -> "1"
+        const rowIdSuffix = row.id.split('_')[1];
         const container = {
           container_number: formData.get(`container_number_${rowIdSuffix}`),
           type_container: formData.get(`type_container_${rowIdSuffix}`),
@@ -360,39 +417,30 @@
       try {
         const response = await fetch('https://script.google.com/macros/s/AKfycbzY6UIYG9OrwF78KNT1iWkHmgepaVApP2lyoAbzk_qb6YGkLhR1NPpus3JJoyGXnnA4/exec', {
           method: 'POST',
-          mode: 'no-cors', // Client-side cannot read the response from Google Apps Script with no-cors
-          headers: { 
-            // 'Content-Type': 'application/json' // Not needed for FormData directly to GAS, unless GAS is specifically expecting JSON
-            // For 'no-cors' and sending to GAS, it's often easier to let the browser set Content-Type or use 'text/plain' for simple proxying.
-            // However, since we are constructing a JSON object `data` and then stringifying it, application/json is correct.
-            // If your GAS doPost(e) expects e.postData.contents as JSON string, this is correct.
-             'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data) // Sending the manually constructed JSON
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
         });
-        // With no-cors, we can't check response.ok or response.status
         alert('Permintaan pengiriman data telah dikirim. Harap tunggu konfirmasi melalui email.');
         form.reset();
 
-        // Clean up rows, leaving only the first one
         const allMainRows = Array.from(tableBody.querySelectorAll('tr.container-row'));
         const allReeferRows = Array.from(tableBody.querySelectorAll('tr[id^="reefer_fields_"]'));
         const allDgRows = Array.from(tableBody.querySelectorAll('tr[id^="dg_fields_"]'));
 
-        for (let i = allMainRows.length - 1; i > 0; i--) {
+        for (let i = allMainRows.length - 1; i > 0; i--) { // Remove all but the first main row
+            const rowId = allMainRows[i].id.split('_')[1];
+            document.getElementById(`reefer_fields_${rowId}`)?.remove();
+            document.getElementById(`dg_fields_${rowId}`)?.remove();
             allMainRows[i].remove();
         }
-        allReeferRows.forEach(row => { if(row.id !== "reefer_fields_1") row.remove(); });
-        allDgRows.forEach(row => { if(row.id !== "dg_fields_1") row.remove(); });
         
-        // Reset the state for the first row
-        nextRowId = 1; // Reset counter for new rows to start from _1 (first row is _1)
-        updateForm(1); // Reset type/size/conditional fields for the first row
-        // Ensure radio buttons for the first row are also reset (form.reset() should handle this)
+        nextRowId = 1; 
+        updateForm(1);
         const firstRowRadios = document.querySelectorAll('input[name="cetak_kartu_1"]');
         firstRowRadios.forEach(radio => radio.checked = false);
         
-        updateRemoveButtonVisibility(); // Hide remove button if only one row remains
+        updateRemoveButtonVisibility();
 
       } catch (error) {
         console.error('Error submitting data:', error);
@@ -401,9 +449,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        updateForm(1); // Initialize form for the first row
-        updateRemoveButtonVisibility(); // Initialize remove button visibility
+        updateForm(1);
+        updateRemoveButtonVisibility();
     });
   </script>
 </body>
-</html>
+</html/>
