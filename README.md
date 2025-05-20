@@ -6,14 +6,15 @@
   <title>DATA CLOSING TIME</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .hidden { display: none; }
+    .hidden { display: none !important; } /* Added !important for robustness */
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
     .row-enter { animation: fadeIn 0.3s ease-in; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     .radio-group label { cursor: pointer; touch-action: manipulation; }
     .radio-group input:checked + span { background-color: #3b82f6; color: white; }
     input, select, button { min-height: 44px; }
     @media (max-width: 640px) {
-      .container-table { display: block; overflow-x: auto; }
+      .container-table-wrapper { display: block; overflow-x: auto; } /* Renamed for clarity */
       .container-row { display: flex; flex-direction: column; gap: 8px; padding: 8px 0; }
       .container-cell { width: 100%; padding: 4px; }
       th, td { font-size: 12px; padding: 4px; white-space: nowrap; }
@@ -35,32 +36,32 @@
       <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700">Booking Number</label>
-            <input type="text" name="booking_number" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
+            <label for="booking_number_field" class="block text-sm font-medium text-gray-700">Booking Number</label>
+            <input type="text" id="booking_number_field" name="booking_number" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700">POD</label>
-            <input type="text" name="pod" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
+            <label for="pod_field" class="block text-sm font-medium text-gray-700">POD</label>
+            <input type="text" id="pod_field" name="pod" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700">Vessel Name</label>
-            <input type="text" name="vessel_name" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
+            <label for="vessel_name_field" class="block text-sm font-medium text-gray-700">Vessel Name</label>
+            <input type="text" id="vessel_name_field" name="vessel_name" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700">OPR</label>
-            <input type="text" name="opr" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
+            <label for="opr_field" class="block text-sm font-medium text-gray-700">OPR</label>
+            <input type="text" id="opr_field" name="opr" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
           </div>
         </div>
       </div>
-      <div class="bg-white rounded-lg shadow-md container-table">
+      <div class="bg-white rounded-lg shadow-md container-table-wrapper">
         <table class="w-full border-collapse" id="container_table">
           <thead>
             <tr class="bg-gray-200">
-              <th class="p-3 text-left text-sm font-semibold text-gray-700">Container No</th>
-              <th class="p-3 text-left text-sm font-semibold text-gray-700">Type</th>
-              <th class="p-3 text-left text-sm font-semibold text-gray-700">Size</th>
-              <th class="p-3 text-left text-sm font-semibold text-gray-700">Cetak Kartu</th>
-              <th class="p-3"></th>
+              <th scope="col" class="p-3 text-left text-sm font-semibold text-gray-700">Container No</th>
+              <th scope="col" class="p-3 text-left text-sm font-semibold text-gray-700">Type</th>
+              <th scope="col" class="p-3 text-left text-sm font-semibold text-gray-700">Size</th>
+              <th scope="col" class="p-3 text-left text-sm font-semibold text-gray-700">Cetak Kartu</th>
+              <th scope="col" class="p-3"><span class="sr-only">Actions</span></th>
             </tr>
           </thead>
           <tbody>
@@ -84,13 +85,16 @@
                 </select>
               </td>
               <td class="container-cell">
-                <div class="radio-group flex flex-col gap-2">
-                  <label class="flex items-center"><input type="radio" name="cetak_kartu_1" value="sudah" class="mr-2 h-5 w-5"><span class="p-2 rounded-md">Sudah</span></label>
-                  <label class="flex items-center"><input type="radio" name="cetak_kartu_1" value="belum" class="mr-2 h-5 w-5"><span class="p-2 rounded-md">Belum</span></label>
-                </div>
+                <fieldset>
+                    <legend class="sr-only">Cetak Kartu for container 1</legend>
+                    <div class="radio-group flex flex-col gap-2">
+                      <label class="flex items-center"><input type="radio" name="cetak_kartu_1" value="sudah" class="mr-2 h-5 w-5"><span class="p-2 rounded-md">Sudah</span></label>
+                      <label class="flex items-center"><input type="radio" name="cetak_kartu_1" value="belum" class="mr-2 h-5 w-5"><span class="p-2 rounded-md">Belum</span></label>
+                    </div>
+                </fieldset>
               </td>
               <td class="container-cell">
-                <button type="button" onclick="removeRow(1)" class="text-red-500 hover:text-red-700 active:text-red-800 hidden">Remove</button>
+                <button type="button" onclick="removeRow(1)" class="remove-row-button text-red-500 hover:text-red-700 active:text-red-800 hidden">Remove</button>
               </td>
             </tr>
             <tr id="reefer_fields_1" class="hidden">
@@ -115,58 +119,94 @@
             </tr>
           </tbody>
         </table>
-        <button type="button" id="add_button_1" onclick="addRow()" class="add-button bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 active:bg-blue-700 transition w-full mt-2">Add</button>
+        <button type="button" id="add_container_button" onclick="addRow()" class="add-button bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 active:bg-blue-700 transition w-full mt-2">Add Container</button>
       </div>
-      <button type="submit" class="mt-6 w-full bg-green-500 text-white p-3 rounded-md hover:bg-green-600 active:bg-blue-700 transition text-lg">Submit</button>
+      <button type="submit" class="mt-6 w-full bg-green-500 text-white p-3 rounded-md hover:bg-green-600 active:bg-green-700 transition text-lg">Submit</button>
     </form>
   </div>
   <script>
-    let rowCount = 1;
+    let nextRowId = 1; // Used to generate unique IDs for new rows
 
     function updateForm(rowIndex) {
-      const type = document.getElementById(`type_container_${rowIndex}`).value;
+      const typeSelect = document.getElementById(`type_container_${rowIndex}`);
+      if (!typeSelect) return; // Row might have been removed
+      const type = typeSelect.value;
+      
       const sizeSelect = document.getElementById(`size_container_${rowIndex}`);
       const reeferFields = document.getElementById(`reefer_fields_${rowIndex}`);
       const dgFields = document.getElementById(`dg_fields_${rowIndex}`);
 
-      sizeSelect.innerHTML = '';
+      const setTempInput = document.querySelector(`input[name="set_temp_${rowIndex}"]`);
+      const imoInput = document.querySelector(`input[name="imo_${rowIndex}"]`);
+      const unnoInput = document.querySelector(`input[name="unno_${rowIndex}"]`);
+
+      // Reset conditional required attributes
+      if (setTempInput) setTempInput.required = false;
+      if (imoInput) imoInput.required = false;
+      if (unnoInput) unnoInput.required = false;
+
+      // Clear current options
+      if (sizeSelect) sizeSelect.innerHTML = '';
 
       if (type === 'Reefer') {
-        sizeSelect.innerHTML = `
-          <option value="20'RF">20'RF</option>
-          <option value="40'RH">40'RH</option>
-        `;
-        reeferFields.classList.remove('hidden');
-        dgFields.classList.add('hidden');
+        if (sizeSelect) {
+          sizeSelect.innerHTML = `
+            <option value="20'RF">20'RF</option>
+            <option value="40'RH">40'RH</option>
+          `;
+        }
+        if (reeferFields) reeferFields.classList.remove('hidden');
+        if (dgFields) dgFields.classList.add('hidden');
+        if (setTempInput) setTempInput.required = true;
+
       } else {
-        sizeSelect.innerHTML = `
-          <option value="20'GP">20'GP</option>
-          <option value="40'HC">40'HC</option>
-          <option value="45'Ft">45'Ft</option>
-        `;
+        if (sizeSelect) {
+          sizeSelect.innerHTML = `
+            <option value="20'GP">20'GP</option>
+            <option value="40'HC">40'HC</option>
+            <option value="45'Ft">45'Ft</option>
+          `;
+        }
+        if (reeferFields) reeferFields.classList.add('hidden');
+        
         if (type === 'DG') {
-          dgFields.classList.remove('hidden');
-          reeferFields.classList.add('hidden');
+          if (dgFields) dgFields.classList.remove('hidden');
+          if (imoInput) imoInput.required = true;
+          if (unnoInput) unnoInput.required = true;
         } else {
-          reeferFields.classList.add('hidden');
-          dgFields.classList.add('hidden');
+          if (dgFields) dgFields.classList.add('hidden');
         }
       }
     }
 
+    function updateRemoveButtonVisibility() {
+      const tableBody = document.getElementById('container_table').getElementsByTagName('tbody')[0];
+      const allMainRows = tableBody.querySelectorAll('tr.container-row');
+      allMainRows.forEach(row => {
+        const removeBtn = row.querySelector('.remove-row-button');
+        if (removeBtn) {
+          if (allMainRows.length > 1) {
+            removeBtn.classList.remove('hidden');
+          } else {
+            removeBtn.classList.add('hidden');
+          }
+        }
+      });
+    }
+
     function addRow() {
-      rowCount++;
+      nextRowId++;
       const table = document.getElementById('container_table').getElementsByTagName('tbody')[0];
       
       const newRow = document.createElement('tr');
-      newRow.id = `row_${rowCount}`;
+      newRow.id = `row_${nextRowId}`;
       newRow.classList.add('row-enter', 'container-row');
       newRow.innerHTML = `
         <td class="container-cell">
-          <input type="text" name="container_number_${rowCount}" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
+          <input type="text" name="container_number_${nextRowId}" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
         </td>
         <td class="container-cell">
-          <select name="type_container_${rowCount}" id="type_container_${rowCount}" onchange="updateForm(${rowCount})" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+          <select name="type_container_${nextRowId}" id="type_container_${nextRowId}" onchange="updateForm(${nextRowId})" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             <option value="DRY">DRY</option>
             <option value="DG">DG</option>
             <option value="Reefer">Reefer</option>
@@ -174,75 +214,76 @@
           </select>
         </td>
         <td class="container-cell">
-          <select name="size_container_${rowCount}" id="size_container_${rowCount}" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+          <select name="size_container_${nextRowId}" id="size_container_${nextRowId}" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             <option value="20'GP">20'GP</option>
             <option value="40'HC">40'HC</option>
             <option value="45'Ft">45'Ft</option>
           </select>
         </td>
         <td class="container-cell">
-          <div class="radio-group flex flex-col gap-2">
-            <label class="flex items-center"><input type="radio" name="cetak_kartu_${rowCount}" value="sudah" class="mr-2 h-5 w-5"><span class="p-2 rounded-md">Sudah</span></label>
-            <label class="flex items-center"><input type="radio" name="cetak_kartu_${rowCount}" value="belum" class="mr-2 h-5 w-5"><span class="p-2 rounded-md">Belum</span></label>
-          </div>
+          <fieldset>
+            <legend class="sr-only">Cetak Kartu for container ${nextRowId}</legend>
+            <div class="radio-group flex flex-col gap-2">
+              <label class="flex items-center"><input type="radio" name="cetak_kartu_${nextRowId}" value="sudah" class="mr-2 h-5 w-5"><span class="p-2 rounded-md">Sudah</span></label>
+              <label class="flex items-center"><input type="radio" name="cetak_kartu_${nextRowId}" value="belum" class="mr-2 h-5 w-5"><span class="p-2 rounded-md">Belum</span></label>
+            </div>
+          </fieldset>
         </td>
         <td class="container-cell">
-          <button type="button" onclick="removeRow(${rowCount})" class="text-red-500 hover:text-red-700 active:text-red-800">Remove</button>
+          <button type="button" onclick="removeRow(${nextRowId})" class="remove-row-button text-red-500 hover:text-red-700 active:text-red-800">Remove</button>
         </td>
       `;
       table.appendChild(newRow);
 
       const reeferRow = document.createElement('tr');
-      reeferRow.id = `reefer_fields_${rowCount}`;
+      reeferRow.id = `reefer_fields_${nextRowId}`;
       reeferRow.classList.add('hidden');
       reeferRow.innerHTML = `
         <td colspan="5" class="p-3 bg-gray-50">
           <label class="block text-sm font-medium text-gray-700">Set Temp</label>
-          <input type="text" name="set_temp_${rowCount}" placeholder="e.g., -18°C" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off">
+          <input type="text" name="set_temp_${nextRowId}" placeholder="e.g., -18°C" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off">
         </td>
       `;
       table.appendChild(reeferRow);
 
       const dgRow = document.createElement('tr');
-      dgRow.id = `dg_fields_${rowCount}`;
+      dgRow.id = `dg_fields_${nextRowId}`;
       dgRow.classList.add('hidden');
       dgRow.innerHTML = `
         <td colspan="5" class="p-3 bg-gray-50">
           <div class="flex flex-col sm:flex-row gap-4">
             <div class="flex-1">
               <label class="block text-sm font-medium text-gray-700">IMO</label>
-              <input type="text" name="imo_${rowCount}" placeholder="e.g., 3" inputmode="numeric" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off">
+              <input type="text" name="imo_${nextRowId}" placeholder="e.g., 3" inputmode="numeric" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off">
             </div>
             <div class="flex-1">
               <label class="block text-sm font-medium text-gray-700">UNNO</label>
-              <input type="text" name="unno_${rowCount}" placeholder="e.g., 1234" inputmode="numeric" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off">
+              <input type="text" name="unno_${nextRowId}" placeholder="e.g., 1234" inputmode="numeric" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off">
             </div>
           </div>
         </td>
       `;
       table.appendChild(dgRow);
 
-      updateForm(rowCount);
-      document.getElementById(`add_button_${rowCount - 1}`).classList.add('hidden');
-      const newAddButton = document.createElement('button');
-      newAddButton.type = 'button';
-      newAddButton.id = `add_button_${rowCount}`;
-      newAddButton.classList.add('add-button', 'bg-blue-500', 'text-white', 'p-3', 'rounded-md', 'hover:bg-blue-600', 'active:bg-blue-700', 'transition', 'w-full', 'mt-2');
-      newAddButton.textContent = 'Add';
-      newAddButton.onclick = addRow;
-      table.parentNode.appendChild(newAddButton);
+      updateForm(nextRowId);
+      updateRemoveButtonVisibility();
+
+      const firstInputNewRow = newRow.querySelector('input[type="text"], select');
+      if (firstInputNewRow) {
+          firstInputNewRow.focus();
+      }
     }
 
     function removeRow(rowIndex) {
-      if (rowCount === 1) return;
-      document.getElementById(`row_${rowIndex}`).remove();
-      document.getElementById(`reefer_fields_${rowIndex}`).remove();
-      document.getElementById(`dg_fields_${rowIndex}`).remove();
-      document.getElementById(`add_button_${rowIndex}`).remove();
-      if (rowIndex === rowCount) {
-        rowCount--;
-        document.getElementById(`add_button_${rowCount - 1}`).classList.remove('hidden');
-      }
+      const rowToRemove = document.getElementById(`row_${rowIndex}`);
+      const reeferFieldsToRemove = document.getElementById(`reefer_fields_${rowIndex}`);
+      const dgFieldsToRemove = document.getElementById(`dg_fields_${rowIndex}`);
+
+      if (rowToRemove) rowToRemove.remove();
+      if (reeferFieldsToRemove) reeferFieldsToRemove.remove();
+      if (dgFieldsToRemove) dgFieldsToRemove.remove();
+      
+      updateRemoveButtonVisibility();
     }
 
     async function handleSubmit(event) {
@@ -262,44 +303,75 @@
         containers: []
       };
 
-      for (let i = 1; i <= rowCount; i++) {
-        if (document.getElementById(`row_${i}`)) {
-          const container = {
-            container_number: formData.get(`container_number_${i}`),
-            type_container: formData.get(`type_container_${i}`),
-            size_container: formData.get(`size_container_${i}`),
-            cetak_kartu: formData.get(`cetak_kartu_${i}`) || ''
-          };
-          if (container.type_container === 'Reefer') {
-            container.set_temp = formData.get(`set_temp_${i}`) || '';
-          }
-          if (container.type_container === 'DG') {
-            container.imo = formData.get(`imo_${i}`) || '';
-            container.unno = formData.get(`unno_${i}`) || '';
-          }
-          data.containers.push(container);
+      const tableBody = document.getElementById('container_table').getElementsByTagName('tbody')[0];
+      const containerRows = tableBody.querySelectorAll('tr.container-row');
+
+      containerRows.forEach(row => {
+        const rowIdSuffix = row.id.split('_')[1]; // e.g., "row_1" -> "1"
+        const container = {
+          container_number: formData.get(`container_number_${rowIdSuffix}`),
+          type_container: formData.get(`type_container_${rowIdSuffix}`),
+          size_container: formData.get(`size_container_${rowIdSuffix}`),
+          cetak_kartu: formData.get(`cetak_kartu_${rowIdSuffix}`) || ''
+        };
+        if (container.type_container === 'Reefer') {
+          container.set_temp = formData.get(`set_temp_${rowIdSuffix}`) || '';
         }
-      }
+        if (container.type_container === 'DG') {
+          container.imo = formData.get(`imo_${rowIdSuffix}`) || '';
+          container.unno = formData.get(`unno_${rowIdSuffix}`) || '';
+        }
+        data.containers.push(container);
+      });
+
 
       try {
         const response = await fetch('https://script.google.com/macros/s/AKfycbzY6UIYG9OrwF78KNT1iWkHmgepaVApP2lyoAbzk_qb6YGkLhR1NPpus3JJoyGXnnA4/exec', {
           method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
+          mode: 'no-cors', // Client-side cannot read the response from Google Apps Script with no-cors
+          headers: { 
+            // 'Content-Type': 'application/json' // Not needed for FormData directly to GAS, unless GAS is specifically expecting JSON
+            // For 'no-cors' and sending to GAS, it's often easier to let the browser set Content-Type or use 'text/plain' for simple proxying.
+            // However, since we are constructing a JSON object `data` and then stringifying it, application/json is correct.
+            // If your GAS doPost(e) expects e.postData.contents as JSON string, this is correct.
+             'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data) // Sending the manually constructed JSON
         });
-        alert('Data submitted successfully to Google Sheets!');
+        // With no-cors, we can't check response.ok or response.status
+        alert('Permintaan pengiriman data telah dikirim. Harap tunggu konfirmasi melalui email.');
         form.reset();
-        while (rowCount > 1) {
-          removeRow(rowCount);
+
+        // Clean up rows, leaving only the first one
+        const allMainRows = Array.from(tableBody.querySelectorAll('tr.container-row'));
+        const allReeferRows = Array.from(tableBody.querySelectorAll('tr[id^="reefer_fields_"]'));
+        const allDgRows = Array.from(tableBody.querySelectorAll('tr[id^="dg_fields_"]'));
+
+        for (let i = allMainRows.length - 1; i > 0; i--) {
+            allMainRows[i].remove();
         }
-        updateForm(1);
+        allReeferRows.forEach(row => { if(row.id !== "reefer_fields_1") row.remove(); });
+        allDgRows.forEach(row => { if(row.id !== "dg_fields_1") row.remove(); });
+        
+        // Reset the state for the first row
+        nextRowId = 1; // Reset counter for new rows to start from _1 (first row is _1)
+        updateForm(1); // Reset type/size/conditional fields for the first row
+        // Ensure radio buttons for the first row are also reset (form.reset() should handle this)
+        const firstRowRadios = document.querySelectorAll('input[name="cetak_kartu_1"]');
+        firstRowRadios.forEach(radio => radio.checked = false);
+        
+        updateRemoveButtonVisibility(); // Hide remove button if only one row remains
+
       } catch (error) {
-        alert('Failed to submit data: ' + error.message + '. Please try again.');
+        console.error('Error submitting data:', error);
+        alert('Gagal mengirim data: ' + error.message + '. Silakan coba lagi.');
       }
     }
 
-    updateForm(1);
+    document.addEventListener('DOMContentLoaded', () => {
+        updateForm(1); // Initialize form for the first row
+        updateRemoveButtonVisibility(); // Initialize remove button visibility
+    });
   </script>
 </body>
 </html>
