@@ -135,8 +135,16 @@
             <input type="text" id="pod_field" name="pod" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
           </div>
           <div>
-            <label for="vessel_name_field" class="block text-sm font-medium text-gray-700">Vessel Name</label>
-            <input type="text" id="vessel_name_field" name="vessel_name" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" autocomplete="off" required>
+            <label for="vessel_name_select" class="block text-sm font-medium text-gray-700">Vessel Name</label>
+  <select id="vessel_name_select" name="vessel_name" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" required>
+    <option value="" disabled selected>-- Select Vessel --</option> <!-- Opsi placeholder -->
+    <option value="MV.MTT SAISUNEE">MV.MTT SAISUNEE</option>
+    <option value="MV.IMKE SCHEPERS">MV.IMKE SCHEPERS</option>
+    <option value="MV.VIRA BHUM">MV.VIRA BHUM</option>
+    <option value="MV.LADY OF LUCK">MV.LADY OF LUCK</option>
+    <option value="MV.HUNSA BHUM">MV.HUNSA BHUM</option>
+    <option value="MV.NYK DANIELLA">MV.NYK DANIELLA</option>
+    <option value="MV.WAN HAI">MV.WAN HAI</option>
           </div>
           <div>
             <label for="opr_field" class="block text-sm font-medium text-gray-700">OPR</label>
@@ -164,7 +172,7 @@
                 <select name="type_container_1" id="type_container_1" onchange="updateForm(1)" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
                   <option value="DRY">DRY</option>
                   <option value="DG">DG</option>
-                  <option value="Reefer">Reefer</option>
+                  <option value="REEFER">REEFER</option>
                   <option value="MTY">MTY</option>
                 </select>
               </td>
@@ -172,7 +180,7 @@
                 <select name="size_container_1" id="size_container_1" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
                   <option value="20'GP">20'GP</option>
                   <option value="40'HC">40'HC</option>
-                  <option value="45'Ft">45'Ft</option>
+                  <option value="45'FT">45'FT</option>
                 </select>
               </td>
               <td>
@@ -237,7 +245,7 @@
 
       if (sizeSelect) sizeSelect.innerHTML = '';
 
-      if (type === 'Reefer') {
+      if (type === 'REEFER') {
         if (sizeSelect) {
           sizeSelect.innerHTML = `
             <option value="20'RF">20'RF</option>
@@ -253,7 +261,7 @@
           sizeSelect.innerHTML = `
             <option value="20'GP">20'GP</option>
             <option value="40'HC">40'HC</option>
-            <option value="45'Ft">45'Ft</option>
+            <option value="45'FT">45'FT</option>
           `;
         }
         if (reeferFields) reeferFields.classList.add('hidden');
@@ -298,7 +306,7 @@
           <select name="type_container_${nextRowId}" id="type_container_${nextRowId}" onchange="updateForm(${nextRowId})" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             <option value="DRY">DRY</option>
             <option value="DG">DG</option>
-            <option value="Reefer">Reefer</option>
+            <option value="REEFER">REEFER</option>
             <option value="MTY">MTY</option>
           </select>
         </td>
@@ -306,7 +314,7 @@
           <select name="size_container_${nextRowId}" id="size_container_${nextRowId}" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             <option value="20'GP">20'GP</option>
             <option value="40'HC">40'HC</option>
-            <option value="45'Ft">45'Ft</option>
+            <option value="45'FT">45'FT</option>
           </select>
         </td>
         <td>
@@ -403,7 +411,7 @@
           size_container: formData.get(`size_container_${rowIdSuffix}`),
           cetak_kartu: formData.get(`cetak_kartu_${rowIdSuffix}`) || ''
         };
-        if (container.type_container === 'Reefer') {
+        if (container.type_container === 'REEFER') {
           container.set_temp = formData.get(`set_temp_${rowIdSuffix}`) || '';
         }
         if (container.type_container === 'DG') {
@@ -421,7 +429,7 @@
           headers: { 'Content-Type': 'application/json'},
           body: JSON.stringify(data)
         });
-        alert('Permintaan pengiriman data telah dikirim. Harap tunggu konfirmasi dari pelayaran.');
+        alert('Permintaan pengiriman data telah dikirim. Harap tunggu konfirmasi dari Pelayaran');
         form.reset();
 
         const allMainRows = Array.from(tableBody.querySelectorAll('tr.container-row'));
