@@ -13,14 +13,46 @@
     .radio-group label { cursor: pointer; touch-action: manipulation; }
     .radio-group input:checked + span { background-color: #3b82f6; color: white; }
     input, select, button { min-height: 44px; }
-    @media (max-width: 640px) {
-      .container-table-wrapper { display: block; overflow-x: auto; } /* Renamed for clarity */
-      .container-row { display: flex; flex-direction: column; gap: 8px; padding: 8px 0; }
-      .container-cell { width: 100%; padding: 4px; }
-      th, td { font-size: 12px; padding: 4px; white-space: nowrap; }
+      @media (max-width: 640px) {
+      .container-table-wrapper {
+        display: block;
+        overflow-x: auto; /* Memungkinkan scroll horizontal */
+        -webkit-overflow-scrolling: touch; /* Scroll lebih smooth di iOS */
+      }
+      /* HAPUS atau KOMENTARI aturan untuk .container-row dan .container-cell yang membuatnya jadi kolom */
+      /* .container-row { display: flex; flex-direction: column; gap: 8px; padding: 8px 0; } */
+      /* .container-cell { width: 100%; padding: 4px; } */
+
+      /* Pastikan th dan td tetap memiliki nowrap agar tidak wrap ke bawah */
+      th, td {
+        font-size: 12px; /* Atau sesuaikan */
+        padding: 6px 8px; /* Sedikit lebih besar mungkin lebih baik untuk tap */
+        white-space: nowrap; /* Sangat penting agar teks tidak wrap dan tabel bisa di-scroll */
+      }
+      /* Atur lebar minimum untuk kolom tertentu jika perlu agar tidak terlalu sempit */
+      #container_table th:nth-child(1), #container_table td:nth-child(1) { min-width: 120px; } /* Contoh untuk Container No */
+      #container_table th:nth-child(2), #container_table td:nth-child(2) { min-width: 100px; } /* Contoh untuk Type */
+      #container_table th:nth-child(3), #container_table td:nth-child(3) { min-width: 80px;  } /* Contoh untuk Size */
+      #container_table th:nth-child(4), #container_table td:nth-child(4) { min-width: 150px; } /* Contoh untuk Cetak Kartu, karena ada 2 radio */
+
+
       .add-button { width: 100%; margin-top: 8px; }
-      select, input[type="text"] { font-size: 14px; width: 100%; }
-      .radio-group { flex-direction: column; gap: 6px; }
+      select, input[type="text"] { font-size: 14px; width: 100%; box-sizing: border-box; /* Pastikan padding tidak menambah lebar */}
+
+      /* Untuk radio button "Cetak Kartu" agar tetap rapi di dalam sel yang mungkin sempit */
+      .radio-group {
+        /* Biarkan flex-direction: column agar Sudah dan Belum tetap vertikal di dalam selnya,
+           ATAU ubah ke flex-direction: row jika ingin mereka berdampingan (mungkin terlalu sempit) */
+        flex-direction: column; /* Defaultnya sudah begini dari Tailwind, tapi bisa eksplisit */
+        gap: 4px;
+        align-items: flex-start; /* Rata kiri */
+      }
+      .radio-group label {
+         min-width: 60px; /* Agar label "Sudah" / "Belum" tidak terpotong aneh */
+      }
+      .radio-group input:checked + span {
+        padding: 0.25rem 0.5rem; /* Sedikit lebih kecil jika perlu */
+      }
     }
     @media (max-width: 360px) {
       th, td { font-size: 11px; padding: 3px; }
